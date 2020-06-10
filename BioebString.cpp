@@ -50,4 +50,10 @@ namespace bioeb{
     //TODO
     return tokens;
   }
+
+  icu::UnicodeString intToStr(int number){
+    std::stringstream numberStream;
+    numberStream<<number;
+    return icu::UnicodeString::fromUTF8(numberStream.str());
+  }
 }
