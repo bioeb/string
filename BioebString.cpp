@@ -42,6 +42,7 @@ namespace bioeb{
       text.extract(pos+1, text.countChar32(), text);
       tokens.emplace_back(token);
     }
+    tokens.emplace_back(text);
     return tokens;
   }
 
