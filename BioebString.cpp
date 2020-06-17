@@ -1,4 +1,5 @@
 #include "BioebString.h"
+#include <unicode/ustream.h>
 #include <iostream>
 #include <sstream>
 #include <algorithm>
@@ -46,9 +47,26 @@ namespace bioeb{
     return tokens;
   }
 
-  std::vector<icu::UnicodeString> tokenize(icu::UnicodeString text, icu::UnicodeString delmiters){
+  std::vector<icu::UnicodeString> tokenize(icu::UnicodeString text, icu::UnicodeString delimiters){
     std::vector<icu::UnicodeString> tokens;
-    //TODO
+    tokens.reserve(10);
+    int pos=-1;
+    int minpos=-1;
+    do{
+      minpos=text.countChar32();
+      for(int i=0;i<delimiters.countChar32();++i){
+	pos=text.indexOf(delimiters.tempSubString(i,1));
+	std::cerr<<"`"<<delimiters.tempSubString(i,1)<<"` "<<pos<<std::endl;
+	if(pos<minpos && pos!=-1){
+	  minpos=pos;
+	}
+      }
+      icu::UnicodeString token;
+      text.extractBetween(0,minpos,token);
+      text.extractBetween(minpos+1, text.countChar32(), text);
+      tokens.emplace_back(token);
+      std::cerr<<text<<std::endl<<token<<" "<<minpos<<" "<<pos<<std::endl;
+    }while(minpos!=text.countChar32()+minpos);
     return tokens;
   }
 
