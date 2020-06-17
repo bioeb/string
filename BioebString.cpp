@@ -9,15 +9,17 @@ namespace bioeb{
     std::stringstream stream(text);
     std::string line;
     std::vector<std::string> tokens;
+    tokens.reserve(10);
     while(stream.good()){
       getline(stream,line,delimiter);
-      tokens.push_back(line);
+      tokens.emplace_back(line);
     }
     return tokens;
   }
 
   std::vector<std::string> tokenize(std::string text, std::string delimiters){
     std::vector<std::string> tokens;
+    tokens.reserve(10);
     size_t minPos=std::string::npos;
     do{
       minPos=std::string::npos;
@@ -27,7 +29,7 @@ namespace bioeb{
 	  minPos=pos;
 	}
       }
-      tokens.push_back(text.substr(0,minPos));
+      tokens.emplace_back(text.substr(0,minPos));
       text=text.substr(minPos+1,text.length());
     } while(minPos< std::string::npos);
     return tokens;
