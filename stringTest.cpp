@@ -1,50 +1,38 @@
 #include "BioebString.h"
+#include "yaml.h"
 #include <unicode/ustream.h>
+#include <fstream>
 #include <iostream>
 
 int main(int c, char **argv){
-  std::string line="Hello World";
-  char delimiter=' ';
-  std::vector<std::string> tokens;
-  std::cout<<"Tokenize Test 1: "<<line<<" : `"<<delimiter<<"`"<<std::endl;
-  tokens=bioeb::tokenize(line, delimiter);
-  for(auto token: tokens){
-    std::cout<<"token :`"<<token<<"`"<<std::endl;
+
+  YAML::Node tests = YAML::LoadFile(argv[1]);
+  for(YAML::const_iterator it=tests.begin();it!=tests.end();++it){
+    auto &first=(*it).first;
+    auto &second=(*it).second;
+    icu::UnicodeString testName=icu::UnicodeString::fromUTF8(first.as<std::string>());
+    icu::UnicodeString testLine=icu::UnicodeString::fromUTF8(second["line"].as<std::string>());
+    icu::UnicodeString testDelimiter=icu::UnicodeString::fromUTF8(second["delimiter"].as<std::string>());
+    auto &results=(*it).second["result"];
+
+    std::vector<icu::UnicodeString> testTokens=bioeb::tokenize(testLine,testDelimiter);
+    if(testTokens.size() == results.size()){
+      int i =0;
+      for(YAML::const_iterator it_r=results.begin();it_r!=results.end();++it_r){
+	icu::UnicodeString result=icu::UnicodeString::fromUTF8((*it_r).as<std::string>());
+	//std::cout<<"Compare "<<result<<" "<<testTokens[i]<<std::endl;
+	if(result!=testTokens[i]){
+	  std::cout<<testName<<" FAILED"<<std::endl;
+	  break;
+	}
+	++i;
+      }
+      if(i==testTokens.size()){
+	std::cout<<testName<<" PASSED"<<std::endl;
+      }
+    }else{
+      std::cout<<testName<<" FAILED"<<std::endl;
+    }
   }
-
-  std::string line2="Hello - World";
-  std::string delimiter2=" -";
-  std::cout<<"Tokenize Test 2: "<<line2<<" : `"<<delimiter2<<"`"<<std::endl;
-  std::vector<std::string> tokens2;
-  tokens2=bioeb::tokenize(line2," -");
-  int i=0;
-  for(auto token: tokens2){
-    ++i;
-    std::cout<<"token "<<i<<":`"<<token<<"`"<<std::endl;
-  }
-
-
-  icu::UnicodeString line3="Hello 부 World";
-  std::cout<<"ICU Tokenize UChar"<<std::endl;
-  UChar delimiter3=U'부';
-  std::vector<icu::UnicodeString> tokens3;
-  tokens3=bioeb::tokenize(line3,delimiter3);
-  i=0;
-  for(auto &token: tokens3){
-    ++i;
-    std::cout<<"token "<<i<<":`"<<token<<"`"<<std::endl;
-  }
-
-  icu::UnicodeString line4="Hello 부 World - Goodbye부$부-World";
-  std::cout<<"ICU Tokenize Unicodestring"<<std::endl;
-  icu::UnicodeString delimiter4=UNICODE_STRING("부 -", 3);
-  std::vector<icu::UnicodeString> tokens4;
-  tokens4=bioeb::tokenize(line4,delimiter4);
-  i=0;
-  for(auto &token: tokens4){
-    ++i;
-    std::cout<<"token "<<i<<":`"<<token<<"`"<<std::endl;
-  }
-
   return 0;
 }

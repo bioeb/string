@@ -1,0 +1,35 @@
+---
+test1:
+  delimiter: " "
+  line: "Hello World"
+  result:
+    - "Hello"
+    - "World"
+test2:
+  delimiter: " -"
+  line: "Hello - World"
+  result:
+    - "Hello"
+    - ""
+    - ""
+    - "World"
+test3:
+  delimiter: "부"
+  line: "Hello 부 World"
+  result:
+    - "Hello "
+    - " World"
+test4:
+  delimiter: "부 -"
+  line: "Hello 부 World - Goodbye부$부-World"
+  result:
+    - Hello
+    - ""
+    - ""
+    - World
+    - ""
+    - ""
+    - Goodbye
+    - $
+    - ""
+    - World

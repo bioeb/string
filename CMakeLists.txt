@@ -10,6 +10,10 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
 endif()
 
 find_package(ICU REQUIRED COMPONENTS uc io)
+find_package(yaml-cpp REQUIRED)
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+  set(YAML_CPP_INCLUDE_DIR "/usr/include/yaml-cpp")
+endif()
 
 add_executable(stringTest
   stringTest.cpp
@@ -19,9 +23,12 @@ add_executable(stringTest
 
 target_include_directories(stringTest PRIVATE "${PROJECT_BINARY_DIR}")
 target_include_directories(stringTest PRIVATE "${ICU_INCLUDE_DIR}")
+target_include_directories(stringTest PRIVATE "${YAML_CPP_INCLUDE_DIR}")
 
 target_link_libraries(stringTest ${ICU_LIBRARIES})
+target_link_libraries(stringTest ${YAML_CPP_LIBRARIES})
 
 enable_testing()
 
-add_test(TokenTest1 stringTest)
+add_test(NAME TokenTest1
+  COMMAND stringTest ${CMAKE_SOURCE_DIR}/testdata/tokenizer_tests.yml)
