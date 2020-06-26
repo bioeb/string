@@ -58,7 +58,7 @@ namespace bioeb{
       minpos=text.countChar32();
       for(int i=0;i<delimiters.countChar32();++i){
 	pos=text.indexOf(delimiters.tempSubString(i,1));
-	std::cerr<<"`"<<delimiters.tempSubString(i,1)<<"` "<<pos<<std::endl;
+	//std::cerr<<"`"<<delimiters.tempSubString(i,1)<<"` "<<pos<<std::endl;
 	if(pos<minpos && pos!=-1){
 	  minpos=pos;
 	}
@@ -67,7 +67,7 @@ namespace bioeb{
       text.extractBetween(0,minpos,token);
       text.extractBetween(minpos+1, text.countChar32(), text);
       tokens.emplace_back(token);
-      std::cerr<<text<<std::endl<<token<<" "<<minpos<<" "<<pos<<std::endl;
+      //std::cerr<<text<<std::endl<<token<<" "<<minpos<<" "<<pos<<std::endl;
     }while(minpos!=text.countChar32()+minpos);
     return tokens;
   }
