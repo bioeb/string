@@ -1,4 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+  if(DEFINED ENV{VCPKG_INSTALLATION_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+    set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake"
+      CACHE STRING "")
+  endif()
+endif()
 
 project(StringTest VERSION 1.0)
 
