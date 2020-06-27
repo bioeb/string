@@ -2,7 +2,7 @@ name: String CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, CI-windows-icu]
   pull_request:
     branches: [ master ]
 
