@@ -34,8 +34,8 @@ jobs:
       uses: lukka/run-vcpkg@ensure_cachedir_exists
       id: runvcpkg
       with:
-        vcpkgArguments: '{{ matrix.vcpkgPackages }}'
-        vcpkgTriplet: '{{ matrix.triplet }}'
+        vcpkgArguments: '${{ matrix.vcpkgPackages }}'
+        vcpkgTriplet: '${{ matrix.triplet }}'
         vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
         vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
     - name: dir
