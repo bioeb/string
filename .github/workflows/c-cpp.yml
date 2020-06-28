@@ -45,9 +45,10 @@ jobs:
       run: echo "'${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}' '${{  steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}' "
       shell: bash
       
+    - name: set env
+      run: echo ::set-env name=VCPKG_INSTALLATION_ROOT::${{ GITHUB_WORKSPACE }}/b/vcpkg  
     - name: configure
       run: mkdir build && cd build && cmake ..
-      env:
-        VCPKG_INSTALLATION_ROOT: ${{ GITHUB_WORKSPACE }}/b/vcpkg
+
     - name: build
       run: cmake --build build
