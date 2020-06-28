@@ -18,6 +18,10 @@ jobs:
             triplet: x64-windows
             vcpkgCommitId: 'd47570b8d615abfaa1e31f612d65d89a05815ad9'
             vcpkgPackages: 'icu4c'
+          - os: ubuntu-latest
+            triplet: x64-linux
+            vcpkgCommitId: 'd47570b8d615abfaa1e31f612d65d89a05815ad9'
+            vcpkgPackages: 'icu4c'
     steps:
     - uses: actions/checkout@v2
       with:
