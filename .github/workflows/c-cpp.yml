@@ -46,7 +46,7 @@ jobs:
       shell: bash
       
     - name: set env
-      run: echo ::set-env name=VCPKG_INSTALLATION_ROOT::${{ GITHUB_WORKSPACE }}/b/vcpkg  
+      run: echo ::set-env name=VCPKG_INSTALLATION_ROOT::$RUNNER_WORKSPACE/b/vcpkg  
     - name: configure
       run: mkdir build && cd build && cmake ..
 
