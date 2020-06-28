@@ -49,5 +49,6 @@ jobs:
       shell: bash
     - name: configure
       run: mkdir build && cd build && cmake ..
+      shell: bash
     - name: build
       run: cmake --build build
