@@ -46,6 +46,7 @@ jobs:
       shell: bash
     - name: set VCPKG_INSTALLATION_ROOT
       run: export VCPKG_INSTALLATION_ROOT=$RUNNER_WORKSPACE/b/vcpkg
+      shell: bash
     - name: configure
       run: mkdir build && cd build && cmake ..
     - name: build
