@@ -13,10 +13,34 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
+        include:
+          - os: windows-latest
+            triplet: x64-windows
+            vcpkgCommitId: 'd47570b8d615abfaa1e31f612d65d89a05815ad9'
+            vcpkgPackages: 'icu4c'
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
+    - uses: lukka/get-cmake@latest
+    - name: dir
+      run: find $RUNNER_WORkSPACE
+      shell: bash
+    - name: Restore artifacts or run vcpkg; build and cache artifacts
+      uses: lukka/run-vcpkg@ensure_cachedir_exists
+      id: runvcpkg
+      with:
+        vcpkgArguments: '{{ matrix.vcpkgPackages }}'
+        vcpkgTriplet: '{{ matrix.triplet }}'
+        vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
+        vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
+    - name: dir
+      run: find $RUNNER_WORKSPACE
+      shell: bash
+    - name: Prints output of run-vcpkg task
+      run: echo "'${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}' '${{  steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}' "
+      shell: bash
+      
     - name: configure
       run: mkdir build && cd build && cmake ..
     - name: build
