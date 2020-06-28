@@ -45,7 +45,7 @@ jobs:
       run: echo "'${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}' '${{  steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}' "
       shell: bash
     - name: set VCPKG_INSTALLATION_ROOT
-      run: $Env:VCPKG_INSTALLATION_ROOT=$RUNNER_WORKSPACE/b/vcpkg
+      run: export VCPKG_INSTALLATION_ROOT=$RUNNER_WORKSPACE/b/vcpkg
     - name: configure
       run: mkdir build && cd build && cmake ..
     - name: build
