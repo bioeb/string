@@ -28,10 +28,12 @@ jobs:
         submodules: recursive
     - uses: lukka/get-cmake@latest
     - name: dir
+      if: startsWith(matrix.os,'windows')
       run: find $RUNNER_WORkSPACE
       shell: bash
     - name: Restore artifacts or run vcpkg; build and cache artifacts
       uses: lukka/run-vcpkg@ensure_cachedir_exists
+      if: startsWith(matrix.os,'windows')
       id: runvcpkg
       with:
         vcpkgArguments: '${{ matrix.vcpkgPackages }}'
@@ -44,9 +46,10 @@ jobs:
     - name: Prints output of run-vcpkg task
       run: echo "'${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}' '${{  steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}' "
       shell: bash
-      
+      if: startsWith(matrix.os,'windows')
     - name: set env
-      run: echo ::set-env name=VCPKG_INSTALLATION_ROOT::$RUNNER_WORKSPACE/b/vcpkg  
+      run: echo ::set-env name=VCPKG_INSTALLATION_ROOT::$RUNNER_WORKSPACE/b/vcpkg
+      if: startsWith(matrix.os,'windows')
     - name: configure
       run: mkdir build && cd build && cmake ..
 
