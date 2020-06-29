@@ -47,11 +47,12 @@ jobs:
       run: echo "'${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}' '${{  steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}' "
       shell: bash
       if: startsWith(matrix.os,'windows')
-    - name: set env
-      run: echo ::set-env name=VCPKG_INSTALLATION_ROOT::${{ github.workspace }}/b/vcpkg
-      if: startsWith(matrix.os,'windows')
+#    - name: set env
+#      run: echo ::set-env name=VCPKG_INSTALLATION_ROOT::${{ github.workspace }}/b/vcpkg
+#      if: startsWith(matrix.os,'windows')
     - name: configure
       run: mkdir build && cd build && cmake ..
-
+      env:
+        VCPKG_INSTALLATION_ROOT: ${{ runner.workspace }}/b/vcpkg
     - name: build
       run: cmake --build build
