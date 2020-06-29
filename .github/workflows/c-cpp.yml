@@ -48,10 +48,10 @@ jobs:
       shell: bash
       if: startsWith(matrix.os,'windows')
     - name: set env
-      run: echo ::set-env name=VCPKG_INSTALLATION_ROOT::$RUNNER_WORKSPACE/b/vcpkg
+      run: echo ::set-env name=VCPKG_INSTALLATION_ROOT::${{ RUNNER_WORKSPACE }}/b/vcpkg
       if: startsWith(matrix.os,'windows')
-#    - name: configure
-#      run: mkdir build && cd build && cmake ..
+    - name: configure
+      run: mkdir build && cd build && cmake ..
 
-#    - name: build
-#      run: cmake --build build
+    - name: build
+      run: cmake --build build
