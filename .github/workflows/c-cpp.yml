@@ -48,7 +48,7 @@ jobs:
       shell: bash
       if: startsWith(matrix.os,'windows')
     - name: set env
-      run: echo '::set-env name=VCPKG_INSTALLATION_ROOT::${{ github.workspace }}\b\vcpkg'
+      run: echo '::set-env name=VCPKG_INSTALLATION_ROOT::${{ runner.workspace }}\b\vcpkg'
       if: startsWith(matrix.os,'windows')
       
     - name: configure
