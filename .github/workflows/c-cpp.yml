@@ -55,7 +55,7 @@ jobs:
       run: mkdir build && cd build && cmake ..
 
     - name: build
-      run: cmake --build build
+      run: cmake --build build --config Release
     
     - name: Upload Artifacts     
       if: startsWith(matrix.os,'windows')  != true
