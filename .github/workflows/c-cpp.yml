@@ -58,7 +58,7 @@ jobs:
       run: cmake --build build
     
     - name: Upload Artifacts     
-      if: !startsWith(matrix.os,'windows') 
+      if: startsWith(matrix.os,'windows')  != true
       uses: actions/upload-artifact@v1
       with:
         name: Upload Artifacts
