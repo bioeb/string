@@ -26,6 +26,14 @@ add_executable(stringTest
   BioebString.h
   )
 
+set(OUTPUT_FILE_NAME "stringTest")
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+  set(OUTPUT_FILE_NAME "${OUTPUT_FILE_NAME}MacOS")
+else()
+  set(OUTPUT_FILE_NAME "${OUTPUT_FILE_NAME}${CMAKE_SYSTEM_NAME}")
+endif()
+
+set_target_properties(stringTest PROPERTIES OUTPUT_NAME ${OUTPUT_FILE_NAME})
 target_include_directories(stringTest PRIVATE "${PROJECT_BINARY_DIR}")
 target_include_directories(stringTest PRIVATE "submodules")
 target_include_directories(stringTest PRIVATE "${ICU_INCLUDE_DIR}")
