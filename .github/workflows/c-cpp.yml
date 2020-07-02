@@ -63,13 +63,13 @@ jobs:
     
     - name: Upload Artifacts     
       if: startsWith(matrix.os,'windows')  != true
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: Artifacts
         path: build/stringTest*
     - name: Upload Artifacts Windows    
       if: startsWith(matrix.os,'windows') 
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: Artifacts
         path: build/Release/
