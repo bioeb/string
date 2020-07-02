@@ -1,4 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
+if(DEFINED ENV{VCPKG_INSTALLATION_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+  set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake"
+    CACHE STRING "")
+endif()
 
 project(StringTest VERSION 1.0)
 
@@ -10,7 +14,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
   list(APPEND CMAKE_PREFIX_PATH "/usr/local/opt/icu4c")
 endif()
-
+message(STATUS "STATUS CMAKE_TOOLCHAIN_FILE = ${CMAKE_TOOLCHAIN_FILE}")
+message(STATUS "STATUS ENV VCPKG_INSTALLATION_ROOT = $ENV{VCPKG_INSTALLATION_ROOT}")
 find_package(ICU REQUIRED COMPONENTS uc io)
 
 set(YAML_CPP_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/extern/yaml-cpp/include/yaml-cpp")
@@ -21,6 +26,14 @@ add_executable(stringTest
   BioebString.h
   )
 
+set(OUTPUT_FILE_NAME "stringTest")
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+  set(OUTPUT_FILE_NAME "${OUTPUT_FILE_NAME}MacOS")
+else()
+  set(OUTPUT_FILE_NAME "${OUTPUT_FILE_NAME}${CMAKE_SYSTEM_NAME}")
+endif()
+
+set_target_properties(stringTest PROPERTIES OUTPUT_NAME ${OUTPUT_FILE_NAME})
 target_include_directories(stringTest PRIVATE "${PROJECT_BINARY_DIR}")
 target_include_directories(stringTest PRIVATE "submodules")
 target_include_directories(stringTest PRIVATE "${ICU_INCLUDE_DIR}")
