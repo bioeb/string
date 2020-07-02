@@ -61,15 +61,15 @@ jobs:
     - name: build
       run: cmake --build build --config Release
     
-    - name: Upload Artifacts     
+    - name: Artifacts     
       if: startsWith(matrix.os,'windows')  != true
       uses: actions/upload-artifact@v1
       with:
         name: Upload Artifacts
-        path: build/stringTest
+        path: build/
     - name: Upload Artifacts Windows    
       if: startsWith(matrix.os,'windows') 
       uses: actions/upload-artifact@v1
       with:
-        name: Upload Artifacts
+        name: Artifacts
         path: build/Release/
