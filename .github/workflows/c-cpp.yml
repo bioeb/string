@@ -2,7 +2,7 @@ name: String CI
 
 on:
   push:
-    branches: [ master, CI-windows-icu]
+    branches: [ master, Archive-artifacts-per-system]
   pull_request:
     branches: [ master ]
 
@@ -60,16 +60,24 @@ jobs:
 
     - name: build
       run: cmake --build build --config Release
-    
-    - name: Upload Artifacts     
-      if: startsWith(matrix.os,'windows')  != true
+
+    - name: Upload Artifacts Linux
+      if: startsWith(matrix.os,'linux')
       uses: actions/upload-artifact@v2
       with:
-        name: Artifacts
+        name: Linux artifacts
         path: build/stringTest*
-    - name: Upload Artifacts Windows    
-      if: startsWith(matrix.os,'windows') 
+
+    - name: Upload Artifacts MacOS
+      if: startsWith(matrix.os,'macos')
       uses: actions/upload-artifact@v2
       with:
-        name: Artifacts
+        name: MacOS artifacts
+        path: build/stringTest*
+
+    - name: Upload Artifacts Windows
+      if: startsWith(matrix.os,'windows')
+      uses: actions/upload-artifact@v2
+      with:
+        name: Windows Artifacts
         path: build/Release/
