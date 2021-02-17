@@ -111,11 +111,11 @@ export(EXPORT BioebString-targets
 #   message(STATUS "Done.")
 # endif()
 # include_directories(BEFORE SYSTEM ${yaml-cpp_SOURCE_DIR} ${yaml-cpp_BINARY_DIR}/include)
-# add_executable(stringTest
-#   stringTest.cpp
-# #   BioebString.cpp
-# #   BioebString.h
-# )
+add_executable(stringTest
+  stringTest.cpp
+  BioebString.cpp
+  BioebString.h
+)
 # target_include_directories(stringTest PRIVATE "${PROJECT_BINARY_DIR}")
 # target_include_directories(stringTest PRIVATE "${ICU_INCLUDE_DIR}")
 # target_include_directories(stringTest PRIVATE "${YAML_CPP_INCLUDE_DIR}")
