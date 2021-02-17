@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 3.13)
+if(DEFINED ENV{VCPKG_INSTALLATION_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+  set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake"
+    CACHE STRING "")
+endif()
 
 project(BioebString VERSION 1.0.0.0)
+
+add_subdirectory(extern/yaml-cpp)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -8,8 +14,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
   list(APPEND CMAKE_PREFIX_PATH "/usr/local/opt/icu4c")
 endif()
-
+message(STATUS "STATUS CMAKE_TOOLCHAIN_FILE = ${CMAKE_TOOLCHAIN_FILE}")
+message(STATUS "STATUS ENV VCPKG_INSTALLATION_ROOT = $ENV{VCPKG_INSTALLATION_ROOT}")
 find_package(ICU REQUIRED COMPONENTS uc io)
+
+set(YAML_CPP_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/extern/yaml-cpp/include/yaml-cpp")
 
 add_library(BioebString SHARED)
 add_library(Bioeb::String ALIAS BioebString)
@@ -118,6 +127,21 @@ export(EXPORT BioebString-targets
 # target_link_libraries(stringTest PUBLIC yaml-cpp::yaml-cpp)
 
 # enable_testing()
+set(OUTPUT_FILE_NAME "stringTest")
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+  set(OUTPUT_FILE_NAME "${OUTPUT_FILE_NAME}MacOS")
+else()
+  set(OUTPUT_FILE_NAME "${OUTPUT_FILE_NAME}${CMAKE_SYSTEM_NAME}")
+endif()
+
+set_target_properties(stringTest PROPERTIES OUTPUT_NAME ${OUTPUT_FILE_NAME})
+target_include_directories(stringTest PRIVATE "${PROJECT_BINARY_DIR}")
+target_include_directories(stringTest PRIVATE "submodules")
+target_include_directories(stringTest PRIVATE "${ICU_INCLUDE_DIR}")
+target_include_directories(stringTest PRIVATE "${YAML_CPP_INCLUDE_DIR}")
+
+target_link_libraries(stringTest ${ICU_LIBRARIES})
+target_link_libraries(stringTest yaml-cpp)
 
 # add_test(NAME TokenTest1
 #   COMMAND stringTest ${CMAKE_SOURCE_DIR}/testdata/tokenizer_tests.yml)
