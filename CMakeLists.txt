@@ -41,8 +41,13 @@ if(MSVC)
   )
 endif()
 
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+  list(APPEND CMAKE_PREFIX_PATH "/usr/local/opt/icu4c")
+  message(STATUS "CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}")
+endif()
 
-find_package(ICU REQUIRED COMPONENTS uc io)
+
+find_package(ICU REQUIRED COMPONENTS uc io data i18n)
 
 set(YAML_CPP_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/extern/yaml-cpp/include/yaml-cpp")
 
@@ -53,6 +58,8 @@ target_sources(${PROJECT_NAME}
   src/BioebString.cpp
   )
 target_compile_definitions(${PROJECT_NAME} PUBLIC "${PROJECT_NAME}_DEBUG=$<CONFIG:Debug>")
+
+target_link_libraries(${PROJECT_NAME} PRIVATE ${ICU_LIBRARIES})
 
 set(generated_headers "${CMAKE_CURRENT_BINARY_DIR}/generated_headers")
 set(generated_export "${generated_headers}/${PROJECT_NAME}/${PROJECT_NAME}_EXPORT.h")
@@ -68,6 +75,8 @@ target_include_directories(${PROJECT_NAME}
   PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/src>"
     "$<BUILD_INTERFACE:${generated_headers}>"
+  PRIVATE
+    "${ICU_INCLUDE_DIR}"
   )
 
 include(GNUInstallDirs)
@@ -122,19 +131,19 @@ install(
   DESTINATION "${config_install_dir}"
   )
 
-find_package(yaml-cpp CONFIG REQUIRED)
+# find_package(yaml-cpp CONFIG REQUIRED)
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
   set(YAML_CPP_INCLUDE_DIR "/usr/include/yaml-cpp")
   message(STATUS "YAML include: ${YAML_CPP_INCLUDE_DIR}")
 endif()
 
-add_executable(stringTest
-  stringTest.cpp
-  )
+# add_executable(stringTest
+#   stringTest.cpp
+#   )
 
-target_link_libraries(stringTest PRIVATE BioebString)
-target_link_libraries(stringTest PRIVATE ${ICU_LIBRARIES})
-target_link_libraries(stringTest PUBLIC yaml-cpp)
+# target_link_libraries(stringTest PRIVATE BioebString)
+# target_link_libraries(stringTest PRIVATE ${ICU_LIBRARIES})
+# target_link_libraries(stringTest PUBLIC yaml-cpp)
 
 enable_testing()
 set(OUTPUT_FILE_NAME "stringTest")
@@ -144,9 +153,9 @@ else()
   set(OUTPUT_FILE_NAME "${OUTPUT_FILE_NAME}${CMAKE_SYSTEM_NAME}")
 endif()
 
-target_include_directories(stringTest PRIVATE "${PROJECT_BINARY_DIR}")
-target_include_directories(stringTest PRIVATE "${ICU_INCLUDE_DIR}")
-target_include_directories(stringTest PRIVATE "${YAML_CPP_INCLUDE_DIR}")
+# target_include_directories(stringTest PRIVATE "${PROJECT_BINARY_DIR}")
+# target_include_directories(stringTest PRIVATE "${ICU_INCLUDE_DIR}")
+# target_include_directories(stringTest PRIVATE "${YAML_CPP_INCLUDE_DIR}")
 
-add_test(NAME TokenTest1
-  COMMAND stringTest ${CMAKE_SOURCE_DIR}/testdata/tokenizer_tests.yml)
+# add_test(NAME TokenTest1
+#   COMMAND stringTest ${CMAKE_SOURCE_DIR}/testdata/tokenizer_tests.yml)
