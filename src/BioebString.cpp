@@ -77,4 +77,12 @@ namespace bioeb{
     numberStream<<number;
     return icu::UnicodeString::fromUTF8(numberStream.str());
   }
+
+  void convertToUnicode(const std::vector<std::string> &stringVec,std::vector<icu::UnicodeString> &unicodeVec){
+    unicodeVec.reserve(stringVec.size());
+    for(auto & word:stringVec){
+      unicodeVec.emplace_back(icu::UnicodeString::fromUTF8(word));
+    }
+  }
+
 }

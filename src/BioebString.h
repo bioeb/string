@@ -11,5 +11,7 @@ namespace bioeb{
   BIOEBSTRING_EXPORT std::vector<icu::UnicodeString> tokenize(icu::UnicodeString text, UChar delimiter);
   BIOEBSTRING_EXPORT std::vector<icu::UnicodeString> tokenize(icu::UnicodeString text, icu::UnicodeString delmiters);
   BIOEBSTRING_EXPORT icu::UnicodeString intToStr(int number);
+  BIOEBSTRING_EXPORT void convertToUnicode(const std::vector<std::string> &stringVec,
+					   std::vector<icu::UnicodeString> &unicodeVec);
 }
 #endif
